@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: kyu-svc-nginx
+  labels:
+    name: kyu-svc-nginx
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      name: nginx
+  selector:
+    name: kyu-pod-nginx

@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: kyu-tf-svc
+  labels:
+    name: kyu-tf-svc
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8888
+      protocol: TCP
+  selector: # The listened pod name
+    name: tf-test-pod

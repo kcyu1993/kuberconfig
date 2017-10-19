@@ -1,0 +1,69 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kyu-tfpod-baseline-1
+spec:
+  restartPolicy: Always
+  securityContext:
+    runAsUser: 168151 
+    fsGroup: 11166 
+  containers:
+  - name: tfpod-light-sonetwork
+    image: ntxvm015.iccluster.epfl.ch/cvlab-k8s-master/tfpod:1.2
+    ports:
+    - containerPort: 8888
+      name: http
+    command:
+      - sleep
+      - infinity
+    workingDir: /home/kyu/.pycharm/keras/build/lib/kyu/experiment/
+    env:
+    - name: LD_LIBRARY_PATH
+      value: /usr/lib/nvidia
+    # - name: PATH
+    - name: HOME
+      value: /home/kyu
+    - name: PYTHONPATH
+      value: /home/kyu/.pycharm/keras:/home/kyu/.pycharm/keras/build/lib:$PYTHONPATH
+    resources: 
+      limits: 
+        alpha.kubernetes.io/nvidia-gpu: 1 # requests one GPU
+    volumeMounts:
+    - mountPath: /usr/local/nvidia/bin
+      name: bin
+    - mountPath: /usr/lib/nvidia
+      name: lib
+    - mountPath: /usr/lib/x86_64-linux-gnu/libcuda.so
+      name: libcuda-so
+    - mountPath: /usr/lib/x86_64-linux-gnu/libcuda.so.1
+      name: libcuda-so-1
+    - mountPath: /usr/lib/x86_64-linux-gnu/libcuda.so.375.39
+      name: libcuda-so-375-39
+    # mount the data volumes
+    - mountPath: /home/kyu
+      name: cvlabdata3 
+      subPath: kyu
+    - mountPath: /cvlabdata3
+      name: cvlabdata3
+  volumes:
+    - name: bin
+      hostPath:
+        path: /usr/lib/nvidia-375/bin
+    - name: lib
+      hostPath:
+        path: /usr/lib/nvidia-375
+    - name: libcuda-so
+      hostPath:
+        path: /usr/lib/x86_64-linux-gnu/libcuda.so
+    - name: libcuda-so-1
+      hostPath:
+        path: /usr/lib/x86_64-linux-gnu/libcuda.so.1
+    - name: libcuda-so-375-39
+      hostPath:
+        path: /usr/lib/x86_64-linux-gnu/libcuda.so.375.39
+    - name: cvlabdata3
+      persistentVolumeClaim:
+        claimName: e73d5238-126c-4db6-aa8d-157412c5889c-cvlab
+  imagePullSecrets:
+  - name: icitkey 
+---

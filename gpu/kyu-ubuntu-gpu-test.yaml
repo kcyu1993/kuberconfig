@@ -1,0 +1,36 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kyu-gpu-test
+  labels:
+    name: kyu-gpu-test
+spec:
+  containers:
+  - name:  kyu-gpu-test
+    image: tensorflow/tensorflow:latest-gpu
+    resources:
+      limits:
+        alpha.kubernetes.io/nvidia-gpu: 1
+    volumeMounts:
+    - mountPath: /usr/local/nvidia/bin
+      name: bin
+    - mountPath: /usr/local/nvidia/lib
+      name: lib   
+    - mountPath: /kyu3
+      name: cvlabdata3 
+      subPath: kyu
+    - mountPath: /cvlabdata3
+      name: cvlabdata3
+  volumes:
+  - hostPath:
+      path: /usr/lib/nvidia-375/bin
+    name: bin
+  - hostPath:
+      path: /usr/lib/nvidia-375
+    name: lib
+  # Persistent volume claim for cvlabdata3
+  - name: cvlabdata3
+    persistentVolumeClaim:
+      claimName: e73d5238-126c-4db6-aa8d-157412c5889c-cvlab
+---

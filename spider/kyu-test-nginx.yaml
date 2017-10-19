@@ -1,0 +1,40 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kyu-pod-nginx
+  labels:
+    name: kyu-pod-nginx
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      ports:
+      - containerPort: 80
+      volumeMounts:
+      - mountPath: /usr/share/nginx/html
+        name: cvlabdata3
+        subPath: nginx
+      - mountPath: /cvlabdata3
+        name: cvlabdata3
+      - mountPath: /home/kyu
+        name: cvlabdata3
+        subPath: kyu
+  volumes:
+  - name: cvlabdata3
+    persistentVolumeClaim:
+      claimName: e73d5238-126c-4db6-aa8d-157412c5889c-cvlab
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: kyu-svc-nginx
+  labels:
+    name: kyu-svc-nginx
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      name: nginx
+  selector:
+    name: kyu-pod-nginx

@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kyu-pod-mysql-1
+  labels:
+    name: kyu-pod-mysql
+spec:
+  containers:
+    - name: mysql
+      image: mysql
+      ports:
+      - containerPort: 3306
+      volumeMounts:
+      - mountPath: /var/lib/mysql
+        name: site-data
+        subPath: kyu/mysql
+      - mountPath: /cvlabdata3
+        name: site-data
+      - mountPath: /home/kyu
+        name: site-data
+        subPath: kyu
+      env:
+      - name: MYSQL_ROOT_PASSWORD
+        value: happyhack 
+  volumes:
+  - name: site-data
+    persistentVolumeClaim:
+      claimName: e73d5238-126c-4db6-aa8d-157412c5889c-cvlab
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: kyu-svc-mysql
+  labels:
+    name: kyu-svc-mysql
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 3306
+      name: mysql
+  selector:
+    name: kyu-pod-mysql

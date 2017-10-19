@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: kyu-svc-tf-jupyter-gpu
+  labels:
+    name: kyu-svc-tf-jupyter-gpu
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8888
+      name: kyu-pod-tf-jupyter-gpu
+  selector:
+    name: kyu-pod-tf-jupyter-gpu
+
