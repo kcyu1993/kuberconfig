@@ -34,9 +34,10 @@ metadata:
   labels:
     name: kyu-svc-mysql
 spec:
-  type: LoadBalancer
+#  type: LoadBalancer
   ports:
     - port: 3306
       name: mysql
+      protocol: TCP
   selector:
     name: kyu-pod-mysql
