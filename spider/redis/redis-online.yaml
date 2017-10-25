@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kyu-online-redis
+  labels:
+    name: kyu-online-redis
+spec:
+  containers:
+  - name: gospider-redis
+    image: redis
+    ports:
+    - containerPort: 6379
+    volumeMounts:
+    - mountPath: /data
+      name: redis-claim-0
+      subPath: kyu/amazonspider/
+    - mountPath: /usr/local/etc/redis # where I store the redis.conf
+      name: redis-claim-0
+      subPath: kyu/redis
+    args:
+      - redis-server
+      - /usr/local/etc/redis/redis.conf
+  volumes:
+  - name: redis-claim-0
+    persistentVolumeClaim:
+      claimName: e73d5238-126c-4db6-aa8d-157412c5889c-cvlab
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: kyu-svc-redis
+  labels:
+    name: kyu-svc-redis
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 6379
+      name: redis
+  selector:
+    name: kyu-online-redis
