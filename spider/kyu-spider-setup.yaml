@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kyu-spider-pod-deploy
+spec:
+  restartPolicy: Always
+  securityContext:
+    runAsUser: 168151
+    fsGroup: 11166
+  containers:
+  - name: ubuntu-spider-test
+    image: ntxvm015.iccluster.epfl.ch/cvlab-k8s-master/kyu-ubuntu:16.04
+    ports:
+    - containerPort: 12345
+    volumeMounts:
+    - mountPath: /log
+      name: cvlabdata3
+      subPath: kyu/amazonspider/log/1
+    - mountPath: /data
+      name: cvlabdata3
+      subPath: kyu/amazonspider/data
+    - mountPath: /gopath
+      name: cvlabdata3
+      subPath: kyu/go
+    - mountPath: /go_root
+      name: cvlabdata3
+      subPath: kyu/.local/go
+    - mountPath: /workspace
+      name: cvlabdata3
+      subPath: kyu/go/src/github.com/hunterhug/AmazonBigSpider
+    env:
+    - name: GOPATH
+      value: "/gopath"
+    - name: GOROOT
+      value: "/go_root"
+    command:
+      - sleep
+      - infinity
+    # args:
+    # - /workspace/spider/usa/UASIN
+    # - /workspace/spider/usa/ULIST
+  volumes:
+  - name: cvlabdata3
+    persistentVolumeClaim:
+      claimName: e73d5238-126c-4db6-aa8d-157412c5889c-cvlab
+  imagePullSecrets:
+  - name: icitkey
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kyu-spider-svc-test
+spec:
+  type: LoadBalancer
+  ports:
+  - name: "usa"
+    port: 12345
+    targetPort: 12345
+  selector:
+    name: kyu-spider-pod-test
+status:
+  loadBalancer: {}

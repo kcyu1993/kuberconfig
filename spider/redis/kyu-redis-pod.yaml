@@ -32,7 +32,7 @@ metadata:
   labels:
     name: kyu-svc-redis
 spec:
-#  type: LoadBalancer
+  type: LoadBalancer
   ports:
     - port: 6379
       name: redis
