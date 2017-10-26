@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: kyu-matlab-pod-test
+  name: kyu-matlab-pod-4
 spec:
   restartPolicy: Always
   securityContext:
@@ -9,7 +9,7 @@ spec:
     fsGroup: 11166
   containers:
   - name: kyu-matlab
-    image: ntxvm015.iccluster.epfl.ch/cvlab-k8s-master/matlab:0.1
+    image: ntxvm015.iccluster.epfl.ch/cvlab-k8s-master/matlab:0.4
     ports:
     - containerPort: 8888
       name: http
@@ -37,7 +37,7 @@ spec:
       name: libcuda-so
     - mountPath: /usr/lib/x86_64-linux-gnu/libcuda.so.1
       name: libcuda-so-1
-    - mountPath: /usr/lib/x86_64-linux-gnu/libcuda.so.375.39
+    - mountPath: /usr/lib/x86_64-linux-g nu/libcuda.so.375.39
       name: libcuda-so-375-39
     # mount the data volumes
     - mountPath: /home/kyu
