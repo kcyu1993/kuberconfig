@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: kyu-spider-pod-deploy
+  name: kyu-spider-pod-deploy-usa
 spec:
   restartPolicy: Always
   securityContext:
@@ -58,6 +58,6 @@ spec:
     port: 12345
     targetPort: 12345
   selector:
-    name: kyu-spider-pod-test
+    name: kyu-spider-pod-deploy-usa
 status:
   loadBalancer: {}
