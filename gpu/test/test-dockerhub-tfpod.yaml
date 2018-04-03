@@ -1,27 +1,29 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: tf-test-pod
+  name: tf-docker-pod
 spec:
-  restartPolicy: Always 
+  restartPolicy: Always
   containers:
-  - image: tensorflow/tensorflow:latest-gpu
+  - image: docker.io/kcyu2014/tensorflow:tfpod-v2
     name: tf-test-pod
     env:
     - name: LD_LIBRARY_PATH
       value: /usr/lib/nvidia
-    resources: 
-      limits: 
+#    - name: PYTHONPATH:
+#      value: "/home/kyu/.pycharm/keras\:/home/kyu/.pycharm/code-bases/second_stat"
+    resources:
+      limits:
         nvidia.com/gpu: 1 # requests one GPU
     volumeMounts:
     # mount the data volumes
     - mountPath: /kyu3
-      name: cvlabdata3 
+      name: cvlabdata3
       subPath: kyu
     - mountPath: /cvlabdata3
       name: cvlabdata3
     - mountPath: /home/kyu/.pycharm
-      name: cvlabdata3 
+      name: cvlabdata3
       subPath: kyu/.pycharm
   volumes:
     - name: cvlabdata3

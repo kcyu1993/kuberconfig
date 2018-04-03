@@ -1,23 +1,32 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: kyu-tf-pod
+  name: ltao-tfpod-test-2
 spec:
   restartPolicy: Always 
   containers:
-  - image: tensorflow/tensorflow:latest-gpu
-    name: kyu-tf-pod
+  - name: tfpod-light-sonetwork
+    image: ntxvm015.iccluster.epfl.ch/mlo/ml:1.0
     ports:
     - containerPort: 8888
       name: http
+    command:
+      - sleep
+      - infinity
+    workingDir: /home/kyu/.pycharm/keras/build/lib/kyu/experiment/
     env:
+    - name: LD_LIBRARY_PATH
+      value: /usr/lib/nvidia
+    # - name: PATH
     - name: HOME
       value: /home/kyu
+    - name: PYTHONPATH
+      value: /home/kyu/.pycharm/keras:/home/kyu/.pycharm/keras/build/lib:$PYTHONPATH
     resources: 
       limits: 
         nvidia.com/gpu: 1 # requests one GPU
-
     volumeMounts:
+    # mount the data volumes
     - mountPath: /home/kyu
       name: cvlabdata3 
       subPath: kyu
@@ -27,4 +36,6 @@ spec:
     - name: cvlabdata3
       persistentVolumeClaim:
         claimName: cvlab-scratch
+#  imagePullSecrets:
+#  - name: icitkey
 ---

@@ -1,0 +1,28 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kyu-ubuntu-test
+  labels:
+    name: ubuntu-test
+spec:
+  restartPolicy: Always
+  securityContext:
+    runAsUser: 168151
+    fsGroup: 11166
+  containers:
+    - name: ubuntu-test
+      image: ntxvm015.iccluster.epfl.ch/cvlab-k8s-master/kyu-ubuntu:16.04
+      volumeMounts:
+      - mountPath: /data
+        name: cvlabdata3
+        subPath: kyu
+      command:
+        - sleep
+        - infinity
+  volumes:
+  - name: cvlabdata3
+    persistentVolumeClaim:
+      claimName: e73d5238-126c-4db6-aa8d-157412c5889c-cvlab
+  imagePullSecrets:
+  - name: icitkey

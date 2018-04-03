@@ -1,0 +1,51 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kyu-spider-uk-job
+spec:
+  template:
+    metadata:
+      name: kyu-spider-uk-pod
+    restartPolicy: Never
+    securityContext:
+      runAsUser: 168151
+      fsGroup: 11166
+    containers:
+    - name: ubuntu-spider-test
+      image: ntxvm015.iccluster.epfl.ch/cvlab-k8s-master/kyu-ubuntu:16.04
+      ports:
+      - containerPort: 12346
+      volumeMounts:
+      - mountPath: /log
+        name: cvlabdata3
+        subPath: kyu/amazonspider/log/1
+      - mountPath: /data
+        name: cvlabdata3
+        subPath: kyu/amazonspider/data
+      - mountPath: /gopath
+        name: cvlabdata3
+        subPath: kyu/go
+      - mountPath: /go_root
+        name: cvlabdata3
+        subPath: kyu/.local/go
+      - mountPath: /workspace
+        name: cvlabdata3
+        subPath: kyu/go/src/github.com/hunterhug/AmazonBigSpider
+      env:
+      - name: GOPATH
+        value: "/gopath"
+      - name: GOROOT
+        value: "/go_root"
+      command:
+  #      - sleep
+  #      - infinity
+        - /workspace/spider/uk/UIP
+        - /workspace/spider/uk/UURL
+        - /workspace/spider/uk/UASIN
+        - /workspace/spider/uk/ULIST
+    volumes:
+    - name: cvlabdata3
+      persistentVolumeClaim:
+        claimName: e73d5238-126c-4db6-aa8d-157412c5889c-cvlab
+    imagePullSecrets:
+    - name: icitkey

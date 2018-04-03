@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: kyu-matlab-pod-cuda8-2
+  name: kyu-matlab-pod-cuda8-3
 spec:
   restartPolicy: Always
   securityContext:

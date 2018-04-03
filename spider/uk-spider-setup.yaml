@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: kyu-spider-pod-deploy-usa
+  name: kyu-spider-pod-deploy-uk
 spec:
   restartPolicy: Always
   securityContext:
@@ -11,7 +11,7 @@ spec:
   - name: ubuntu-spider-test
     image: ntxvm015.iccluster.epfl.ch/cvlab-k8s-master/kyu-ubuntu:16.04
     ports:
-    - containerPort: 12345
+    - containerPort: 12346
     volumeMounts:
     - mountPath: /log
       name: cvlabdata3
@@ -36,28 +36,28 @@ spec:
     command:
       - sleep
       - infinity
-    # args:
-    # - /workspace/spider/usa/UASIN
-    # - /workspace/spider/usa/ULIST
+#      - /workspace/spiders/uk/UIP
+#      - /workspace/spiders/uk/UURL
+#      - /workspace/spiders/uk/UASIN
+#      - /workspace/spiders/uk/ULIST
   volumes:
   - name: cvlabdata3
     persistentVolumeClaim:
-      claimName: cvlab-scratch
-#  imagePullSecrets:
-#  - name: icitkey
+      claimName: e73d5238-126c-4db6-aa8d-157412c5889c-cvlab
+  imagePullSecrets:
+  - name: icitkey
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: kyu-spider-svc-test
+  name: kyu-spider-svc-test-uk
 spec:
   type: LoadBalancer
   ports:
-  - name: "usa"
-    port: 12345
-    targetPort: 12345
+  - name: "uk"
+    port: 12346
   selector:
-    name: kyu-spider-pod-deploy-usa
+    name: kyu-spider-pod-deploy-uk
 status:
   loadBalancer: {}

@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: kyu-tfpod-baseline-2
+  name: kyu-tfpod-cuda8-1
 spec:
   restartPolicy: Always
   securityContext:
-    runAsUser: 168151 
-    fsGroup: 11166 
+    runAsUser: 168151
+    fsGroup: 11166
   containers:
   - name: tfpod-light-sonetwork
     image: docker.io/kcyu2014/tensorflow:tfpod-v2
@@ -18,15 +18,15 @@ spec:
       - infinity
     workingDir: /home/kyu/.pycharm/code-bases/secondstat/kyu/experiment/
     env:
-    - name: LD_LIBRARY_PATH
-      value: /usr/lib/nvidia
+#    - name: LD_LIBRARY_PATH
+#      value: /usr/lib/nvidia
     # - name: PATH
     - name: HOME
       value: /home/kyu
     - name: PYTHONPATH
-      value: /home/kyu/.pycharm/keras:/home/kyu/.pycharm/keras/build/lib:$PYTHONPATH
-    resources: 
-      limits: 
+      value: /home/kyu/.pycharm/keras:/home/kyu/.pycharm/code-bases/secondstat:$PYTHONPATH
+    resources:
+      limits:
         nvidia.com/gpu: 1 # requests one GPU
     volumeMounts:
       # mount the data volumes

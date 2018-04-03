@@ -1,19 +1,22 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: ltao-tfpod-test-2
+  name: kyu-matlab-pod-3
 spec:
-  restartPolicy: Always 
+  restartPolicy: Always
+  securityContext:
+    runAsUser: 168151
+    fsGroup: 11166
   containers:
-  - name: tfpod-light-sonetwork
-    image: ntxvm015.iccluster.epfl.ch/mlo/ml:1.0
+  - name: kyu-matlab
+    image: ntxvm015.iccluster.epfl.ch/cvlab-k8s-master/matlab:cuda7.5-1.0
     ports:
     - containerPort: 8888
       name: http
     command:
       - sleep
       - infinity
-    workingDir: /home/kyu/.pycharm/keras/build/lib/kyu/experiment/
+    workingDir: /home/kyu/git/bcnn_kyu
     env:
     - name: LD_LIBRARY_PATH
       value: /usr/lib/nvidia
@@ -22,8 +25,8 @@ spec:
       value: /home/kyu
     - name: PYTHONPATH
       value: /home/kyu/.pycharm/keras:/home/kyu/.pycharm/keras/build/lib:$PYTHONPATH
-    resources: 
-      limits: 
+    resources:
+      limits:
         alpha.kubernetes.io/nvidia-gpu: 1 # requests one GPU
     volumeMounts:
     - mountPath: /usr/local/nvidia/bin
@@ -34,11 +37,11 @@ spec:
       name: libcuda-so
     - mountPath: /usr/lib/x86_64-linux-gnu/libcuda.so.1
       name: libcuda-so-1
-    - mountPath: /usr/lib/x86_64-linux-gnu/libcuda.so.375.39
+    - mountPath: /usr/lib/x86_64-linux-g nu/libcuda.so.375.39
       name: libcuda-so-375-39
     # mount the data volumes
     - mountPath: /home/kyu
-      name: cvlabdata3 
+      name: cvlabdata3
       subPath: kyu
     - mountPath: /cvlabdata3
       name: cvlabdata3
@@ -62,5 +65,5 @@ spec:
       persistentVolumeClaim:
         claimName: e73d5238-126c-4db6-aa8d-157412c5889c-cvlab
   imagePullSecrets:
-  - name: icitkey 
+  - name: icitkey
 ---
