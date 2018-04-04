@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kyu-pytorch-cuda9-multi-1
+spec:
+  restartPolicy: Always
+  securityContext:
+    runAsUser: 168151
+    fsGroup: 11166
+  containers:
+  - name: pytorch-light-sonetwork
+    image: docker.io/kcyu2014/pytorch:v0.1
+    ports:
+    - containerPort: 8888
+      name: http
+    command:
+      - sleep
+      - infinity
+    workingDir: /home/kyu/.pycharm/code-bases/secondstat/kyu/experiment/
+    env:
+#    - name: LD_LIBRARY_PATH
+#      value: /usr/lib/nvidia
+    # - name: PATH
+    - name: HOME
+      value: /home/kyu
+    - name: PYTHONPATH
+      value: /home/kyu/.pycharm/keras:/home/kyu/.pycharm/code-bases/secondstat:$PYTHONPATH
+#    resources:
+#      limits:
+#        nvidia.com/gpu: 1 # requests one GPU
+    volumeMounts:
+      # mount the data volumes
+      - mountPath: /home/kyu
+        name: cvlabdata3
+        subPath: kyu
+      - mountPath: /cvlabdata3
+        name: cvlabdata3
+  volumes:
+    - name: cvlabdata3
+      persistentVolumeClaim:
+        claimName: cvlab-scratch
+#  imagePullSecrets:
+#  - name: icitkey
+---
